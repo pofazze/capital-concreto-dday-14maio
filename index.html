@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D-Day · 14/05/2026 — Capital Concreto</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --orange: #EF4F00;
+    --orange-dark: #B43B00;
+    --orange-bright: #F15A24;
+    --black: #030303;
+    --bg-2: #0E0E0E;
+    --line: #262626;
+    --text-mute: #A1A1A1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--black);
+    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.01em; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .orange { color: var(--orange); }
+  .orange-grad {
+    background: linear-gradient(135deg, var(--orange-bright) 0%, var(--orange) 50%, var(--orange-dark) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .kicker {
+    color: var(--orange);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .kicker::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--orange);
+  }
+  .doc-card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    transition: all .3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-card:hover {
+    border-color: var(--orange);
+    transform: translateY(-4px);
+  }
+  .doc-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(239, 79, 0, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .doc-card:hover::after { opacity: 1; }
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3CfeColorMatrix values='0 0 0 0 0.94 0 0 0 0 0.31 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.4;
+  }
+  .badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    background: rgba(239, 79, 0, 0.12);
+    border: 1px solid var(--orange-dark);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--orange-bright);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .badge-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.3; } }
+</style>
+</head>
+<body>
+
+<header class="border-b border-zinc-900 py-5 px-8">
+  <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
+    <div class="flex items-center gap-5">
+      <img src="assets/logo-symbol.png" class="h-9" alt="Capital Concreto">
+      <div class="border-l border-zinc-800 pl-5">
+        <p class="text-[10px] text-zinc-500 uppercase tracking-[0.3em] font-bold">Capital Concreto</p>
+        <p class="display text-xl text-white tracking-wider mt-0.5">D-DAY · 14 MAIO 2026</p>
+      </div>
+    </div>
+    <span class="badge-live">Operacional · Confidencial</span>
+  </div>
+</header>
+
+<section class="relative py-24 px-8 grain" style="background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(239, 79, 0, 0.12) 0%, transparent 50%);">
+  <div class="max-w-5xl mx-auto relative z-10">
+    <div class="kicker mb-6">Materiais oficiais · Processo Seletivo</div>
+    <h1 class="display text-7xl md:text-8xl leading-[0.95] mb-8 tracking-wide">
+      <span class="orange-grad">D-DAY.</span><br>
+      OS 3 MATERIAIS<br>
+      DE QUINTA-FEIRA.
+    </h1>
+    <p class="text-zinc-300 text-xl max-w-3xl leading-relaxed font-light">
+      Cronograma do dia + apresentação para os candidatos + calculadora de ganhos interativa.
+      Todos prontos pra uso no palco e pra mandar pros 25-30 candidatos.
+    </p>
+  </div>
+</section>
+
+<section class="px-8 py-16">
+  <div class="max-w-6xl mx-auto">
+    <div class="kicker mb-10">3 documentos · Clique para abrir</div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-900">
+
+      <a href="cronograma-14-05.html" class="doc-card p-10 block relative">
+        <div class="relative z-10">
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mb-3 font-bold">Documento 01</div>
+          <i data-lucide="calendar-clock" class="w-10 h-10 text-orange mb-6"></i>
+          <h3 class="display text-4xl mb-3 tracking-wide">CRONOGRAMA</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">
+            Hora a hora do dia 14/05. Setup → Apresentação → Almoço → Decisão → Integração.
+            Inclui alertas operacionais e times responsáveis.
+          </p>
+          <div class="flex items-center gap-2 text-orange text-sm font-bold">
+            Abrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </div>
+        </div>
+      </a>
+
+      <a href="apresentacao-d-day.html" class="doc-card p-10 block relative">
+        <div class="relative z-10">
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mb-3 font-bold">Documento 02</div>
+          <i data-lucide="presentation" class="w-10 h-10 text-orange mb-6"></i>
+          <h3 class="display text-4xl mb-3 tracking-wide">APRESENTAÇÃO</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">
+            Pitch da vaga em 14 seções: Capital Concreto, produto CAPTO, modelo célula, remuneração
+            e potencial de ganho. Pra projetar no auditório.
+          </p>
+          <div class="flex items-center gap-2 text-orange text-sm font-bold">
+            Abrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </div>
+        </div>
+      </a>
+
+      <a href="calculadora-ganhos.html" class="doc-card p-10 block relative">
+        <div class="relative z-10">
+          <div class="text-xs text-zinc-500 uppercase tracking-widest mb-3 font-bold">Documento 03</div>
+          <i data-lucide="calculator" class="w-10 h-10 text-orange mb-6"></i>
+          <h3 class="display text-4xl mb-3 tracking-wide">CALCULADORA</h3>
+          <p class="text-zinc-400 leading-relaxed mb-6">
+            Híbrida: 3 cenários (15/28/50 contratos) + slider personalizado de 5 a 80.
+            Gráfico mensal e tabela completa. Pra cada candidato simular no celular.
+          </p>
+          <div class="flex items-center gap-2 text-orange text-sm font-bold">
+            Abrir <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div>
+        <div class="display text-6xl orange-grad mb-2">14</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest font-bold">Maio 2026 · Quinta</p>
+      </div>
+      <div>
+        <div class="display text-6xl orange-grad mb-2">22</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest font-bold">Contratados no dia</p>
+      </div>
+      <div>
+        <div class="display text-6xl orange-grad mb-2">18/05</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest font-bold">GO-LIVE · Comercial no ar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-10 px-8 border-t border-zinc-900">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo-symbol.png" class="h-7" alt="Capital">
+      <span class="text-xs text-zinc-600 uppercase tracking-widest font-bold">Capital Concreto · Avenida Andromeda 885 · Alphaville/SP</span>
+    </div>
+    <div class="text-xs text-zinc-600 uppercase tracking-widest">v2 · 11/05/2026</div>
+  </div>
+</footer>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

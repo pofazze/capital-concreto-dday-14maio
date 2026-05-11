@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capital Concreto — A Vaga | D-Day 14/05</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --bg: #0A0A0B;
+    --bg-2: #131316;
+    --bg-3: #1C1C20;
+    --gold: #C8A560;
+    --gold-bright: #E4C57A;
+    --gold-dark: #8E7340;
+    --text: #F5F5F4;
+    --text-mute: #A1A1AA;
+    --line: #27272A;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    overflow-x: hidden;
+  }
+  .display { font-family: 'Fraunces', serif; font-feature-settings: "ss01" on; letter-spacing: -0.02em; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .gold { color: var(--gold); }
+  .gold-grad {
+    background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .gold-line {
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    height: 1px;
+  }
+  .section {
+    min-height: 100vh;
+    padding: 100px 60px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .kicker {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .kicker::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .nav {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .nav a {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--line);
+    transition: all .3s;
+    border: 1px solid transparent;
+  }
+  .nav a:hover { background: var(--gold-dark); }
+  .nav a.active {
+    background: var(--gold);
+    transform: scale(1.4);
+    box-shadow: 0 0 0 4px rgba(200, 165, 96, 0.15);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--gold-dark);
+    background: rgba(200, 165, 96, 0.05);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gold-bright);
+  }
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    padding: 32px;
+    border-radius: 4px;
+    transition: all .3s;
+  }
+  .card:hover {
+    border-color: var(--gold-dark);
+    background: var(--bg-3);
+  }
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+  }
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9'/%3E%3CfeColorMatrix values='0 0 0 0 0.78 0 0 0 0 0.65 0 0 0 0 0.38 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.7;
+  }
+  .stamp {
+    position: absolute;
+    top: 30px;
+    left: 60px;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--text-mute);
+    font-weight: 500;
+  }
+  .stamp .num { color: var(--gold); }
+  .gradient-bg {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200, 165, 96, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(200, 165, 96, 0.04) 0%, transparent 60%);
+  }
+  .hero-mark {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 480px;
+    height: 480px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+  .hero-mark::after {
+    content: '';
+    position: absolute;
+    inset: 60px;
+    border: 1px solid var(--gold-dark);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+  .hero-mark::before {
+    content: 'CC';
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 140px;
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+  }
+  .line-grid {
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px);
+    background-size: calc(100% / 12) 100%;
+    position: absolute;
+    inset: 0;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .pill-tab {
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 11px;
+    color: var(--text-mute);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .arrow-down {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    animation: pulse-down 2s ease-in-out infinite;
+  }
+  @keyframes pulse-down {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.6; }
+    50% { transform: translateX(-50%) translateY(8px); opacity: 1; }
+  }
+  .quote {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.4;
+    color: var(--gold-bright);
+  }
+  table.elegant {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+  table.elegant th {
+    text-align: left;
+    padding: 16px 20px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    font-weight: 600;
+    border-bottom: 1px solid var(--gold-dark);
+  }
+  table.elegant td {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text);
+  }
+  table.elegant td:first-child {
+    color: var(--text-mute);
+    font-size: 13px;
+  }
+  table.elegant tr:hover td {
+    background: rgba(200, 165, 96, 0.03);
+  }
+  .vertical-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--text-mute);
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+  }
+  .number-list { counter-reset: item; }
+  .number-list > div { counter-increment: item; }
+  .number-list > div::before {
+    content: counter(item, decimal-leading-zero);
+    font-family: 'Fraunces', serif;
+    font-size: 48px;
+    color: var(--gold);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 12px;
+    line-height: 1;
+  }
+  .glow-card {
+    background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-3) 100%);
+    border: 1px solid var(--gold-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(200, 165, 96, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .check { color: var(--gold); }
+  @media (max-width: 768px) {
+    .section { padding: 60px 24px; }
+    .stamp { left: 24px; }
+    .nav { right: 12px; }
+    .hero-mark { display: none; }
+    .stat-num { font-size: 44px; }
+    .quote { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#abertura" class="active" data-label="Abertura"></a>
+  <a href="#capital" data-label="Capital"></a>
+  <a href="#trackrecord" data-label="Track Record"></a>
+  <a href="#capto" data-label="CAPTO"></a>
+  <a href="#produto" data-label="Produto"></a>
+  <a href="#diferencial" data-label="Diferencial"></a>
+  <a href="#r496" data-label="R.496"></a>
+  <a href="#vaga" data-label="A Vaga"></a>
+  <a href="#remuneracao" data-label="Remuneração"></a>
+  <a href="#suporte" data-label="Suporte"></a>
+  <a href="#perfil" data-label="Perfil"></a>
+  <a href="#ganho" data-label="Potencial"></a>
+  <a href="#carreira" data-label="Carreira"></a>
+  <a href="#cta" data-label="CTA"></a>
+</nav>
+
+<!-- ABERTURA -->
+<section id="abertura" class="section gradient-bg grain flex items-center" style="position: relative;">
+  <div class="stamp">D-DAY · QUI 14 / MAI / 2026 · <span class="num">001</span></div>
+  <div class="hero-mark"></div>
+  <div class="line-grid"></div>
+  <div class="max-w-4xl relative z-10">
+    <div class="kicker">A Vaga · Sessão Presencial</div>
+    <h1 class="display text-7xl md:text-8xl font-medium leading-[0.95] mb-8">
+      A vaga mais<br>
+      <span class="gold-grad">disputada</span> do<br>
+      mercado imobiliário<br>
+      <span class="text-zinc-500">de 2026.</span>
+    </h1>
+    <p class="text-zinc-400 text-xl max-w-2xl leading-relaxed font-light">
+      Você está aqui porque foi selecionado entre mais de mil candidatos.
+      Nas próximas horas, você vai entender por que essa decisão pode mudar
+      sua trajetória profissional.
+    </p>
+    <div class="mt-12 flex gap-3 flex-wrap">
+      <span class="badge"><i data-lucide="map-pin" class="w-3 h-3"></i> Alphaville · Barueri/SP</span>
+      <span class="badge"><i data-lucide="users" class="w-3 h-3"></i> 22 vagas</span>
+      <span class="badge"><i data-lucide="zap" class="w-3 h-3"></i> Onboard 15-17/05 · Go-Live 18/05</span>
+    </div>
+  </div>
+  <div class="arrow-down">
+    <i data-lucide="chevron-down" class="w-4 h-4 mx-auto mb-1"></i>
+    ROLE PARA EXPLORAR
+  </div>
+</section>
+
+<!-- CAPITAL CONCRETO -->
+<section id="capital" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 01 · QUEM SOMOS · <span class="num">002</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Capítulo 01 · A Empresa</div>
+    <h2 class="display text-6xl md:text-7xl font-medium leading-[0.95] mb-12 max-w-4xl">
+      Em 8 anos, construímos<br>
+      <span class="gold-grad">uma das incorporadoras mais rentáveis</span><br>
+      do Brasil. Sem dívida bancária.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800 mt-16">
+      <div class="card bg-[#131316]">
+        <div class="kicker">Fundação</div>
+        <div class="stat-num gold-grad">2018</div>
+        <p class="text-zinc-500 mt-3 text-sm">Julho. Sede em Alphaville, SP.</p>
+      </div>
+      <div class="card bg-[#131316]">
+        <div class="kicker">Empreendimentos</div>
+        <div class="stat-num gold-grad">+11</div>
+        <p class="text-zinc-500 mt-3 text-sm">Entregues em São Paulo</p>
+      </div>
+      <div class="card bg-[#131316]">
+        <div class="kicker">Unidades</div>
+        <div class="stat-num gold-grad">+300</div>
+        <p class="text-zinc-500 mt-3 text-sm">100% das obras concluídas</p>
+      </div>
+    </div>
+
+    <div class="mt-20">
+      <p class="quote max-w-3xl">
+        "A Capital nunca atrasou uma obra. Mesmo durante a pandemia,
+        trabalhamos 3 anos sem ganhar nada e <span class="gold">100% dos investidores
+        receberam seus apartamentos</span>."
+      </p>
+      <p class="text-zinc-500 mt-4 text-sm uppercase tracking-widest">— Marcelo Sampaio, CEO</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRACK RECORD -->
+<section id="trackrecord" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 01 · TRACK RECORD · <span class="num">003</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">A prova nos números</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-16 max-w-4xl">
+      <span class="gold-grad">R$ 6 milhões</span> em vendas todo mês.<br>
+      Sem dívida bancária. Zero.
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+      <div>
+        <div class="stat-num gold-grad">R$ 6M</div>
+        <p class="text-zinc-400 text-sm mt-2">Vendas / mês atual</p>
+      </div>
+      <div>
+        <div class="stat-num gold-grad">2,4%</div>
+        <p class="text-zinc-400 text-sm mt-2">Rentabilidade histórica a.m.</p>
+      </div>
+      <div>
+        <div class="stat-num gold-grad">+200</div>
+        <p class="text-zinc-400 text-sm mt-2">Investidores ativos</p>
+      </div>
+      <div>
+        <div class="stat-num gold-grad">19</div>
+        <p class="text-zinc-400 text-sm mt-2">Meses retorno médio</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="kicker mb-6">Empreendimentos</div>
+      <div class="flex flex-wrap gap-3">
+        <span class="pill-tab">Resid. Moema</span>
+        <span class="pill-tab">Resid. Malabar</span>
+        <span class="pill-tab">Resid. Ibiza</span>
+        <span class="pill-tab">UP Vila Mariana</span>
+        <span class="pill-tab">Stay NK</span>
+        <span class="pill-tab">The Loft Spenciere</span>
+        <span class="pill-tab">The Loft Butantã</span>
+        <span class="pill-tab">R.496</span>
+        <span class="pill-tab">Noor Jardins I</span>
+        <span class="pill-tab">Noor Jardins II</span>
+        <span class="pill-tab">Noor Brooklin I</span>
+        <span class="pill-tab">Noor Brooklin II</span>
+      </div>
+    </div>
+
+    <div class="gold-line mt-20 mb-8"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div>
+        <i data-lucide="award" class="w-6 h-6 text-[#C8A560] mb-3"></i>
+        <h3 class="display text-xl mb-2">Parceria Cyrela + Capital</h3>
+        <p class="text-zinc-500 text-sm leading-relaxed">A Leroy Merlin entrega móveis prontos apenas para 2 incorporadoras no Brasil. Somos uma delas.</p>
+      </div>
+      <div>
+        <i data-lucide="shield-check" class="w-6 h-6 text-[#C8A560] mb-3"></i>
+        <h3 class="display text-xl mb-2">Zero endividamento</h3>
+        <p class="text-zinc-500 text-sm leading-relaxed">Nunca dependemos de banco. Todo capital de obra vem direto do investidor parceiro.</p>
+      </div>
+      <div>
+        <i data-lucide="trophy" class="w-6 h-6 text-[#C8A560] mb-3"></i>
+        <h3 class="display text-xl mb-2">R.496 vai a Paris</h3>
+        <p class="text-zinc-500 text-sm leading-relaxed">Concorre prêmio internacional de arquitetura. Assinatura do escritório Triptyque (Rosewood SP, sede Olimpíadas).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPTO -->
+<section id="capto" class="section gradient-bg flex items-center">
+  <div class="stamp">CAPÍTULO 02 · O PRODUTO · <span class="num">004</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Capítulo 02 · CAPTO</div>
+    <h2 class="display text-7xl md:text-8xl font-medium leading-[0.95] mb-12">
+      Invista na <span class="gold-grad italic">renda</span>.<br>
+      Não no <span class="text-zinc-500 line-through">imóvel</span>.
+    </h2>
+    <p class="text-zinc-400 text-xl max-w-3xl leading-relaxed font-light">
+      A CAPTO é a plataforma de investimento participativo da Capital Concreto.
+      O cliente compra <span class="gold">o direito à renda</span> de um apartamento real, em São Paulo,
+      a partir de R$ 18.600 — sem precisar comprar o imóvel inteiro.
+    </p>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+      <div>
+        <div class="kicker mb-4">O que o cliente recebe</div>
+        <ul class="space-y-4">
+          <li class="flex gap-4 items-start">
+            <i data-lucide="banknote" class="w-5 h-5 text-[#C8A560] mt-1 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white">Renda mensal vitalícia</strong>
+              <p class="text-zinc-500 text-sm">Dividendos a partir do mês 30. Liquidação até o 3º dia útil do mês seguinte.</p>
+            </div>
+          </li>
+          <li class="flex gap-4 items-start">
+            <i data-lucide="badge-percent" class="w-5 h-5 text-[#C8A560] mt-1 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white">Dividendos isentos de IR</strong>
+              <p class="text-zinc-500 text-sm">Estrutura em hold patrimonial. Inteligência tributária pronta para o pequeno investidor.</p>
+            </div>
+          </li>
+          <li class="flex gap-4 items-start">
+            <i data-lucide="trending-up" class="w-5 h-5 text-[#C8A560] mt-1 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white">Valorização imobiliária</strong>
+              <p class="text-zinc-500 text-sm">Bairros premium de SP têm histórico de 8-10% a.a. de valorização.</p>
+            </div>
+          </li>
+          <li class="flex gap-4 items-start">
+            <i data-lucide="repeat" class="w-5 h-5 text-[#C8A560] mt-1 flex-shrink-0"></i>
+            <div>
+              <strong class="text-white">Mercado secundário (B3)</strong>
+              <p class="text-zinc-500 text-sm">Pode revender as cotas. A B3 já participa. Liquidez parcial garantida.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="glow-card p-10">
+        <div class="kicker mb-4 relative z-10">Estrutura jurídica</div>
+        <table class="elegant relative z-10">
+          <tr><td>Regulação</td><td class="gold">CVM 88</td></tr>
+          <tr><td>Plataforma</td><td>Divify</td></tr>
+          <tr><td>Estrutura interna</td><td>SCP em hold</td></tr>
+          <tr><td>Participação</td><td>Até 3,99%</td></tr>
+          <tr><td>Recompra</td><td>A partir do 3º ano (+5% a.a.)</td></tr>
+          <tr><td>Desistência</td><td>5 dias sem multa</td></tr>
+          <tr><td>Pior caso</td><td>Capital vende e devolve</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUTO COMERCIAL -->
+<section id="produto" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 02 · O PITCH · <span class="num">005</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">A cota CAPTO em números</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-16 max-w-4xl">
+      <span class="gold-grad">1 metro quadrado.</span><br>
+      Acessível como uma assinatura.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+      <div>
+        <div class="text-xs uppercase tracking-widest text-zinc-500 mb-2">Valor da cota</div>
+        <div class="stat-num gold-grad">R$ 18.600</div>
+        <p class="text-zinc-400 mt-3">Equivale a 1 m² do empreendimento, mobiliado.</p>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-widest text-zinc-500 mb-2">Parcelado</div>
+        <div class="stat-num gold-grad">R$ 620 <span class="text-xl text-zinc-500 font-normal">/mês</span></div>
+        <p class="text-zinc-400 mt-3">Em 30 parcelas. Sem entrada.</p>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-widest text-zinc-500 mb-2">À vista</div>
+        <div class="stat-num gold-grad">R$ 18.000</div>
+        <p class="text-zinc-400 mt-3">Desconto de R$ 600.</p>
+      </div>
+    </div>
+
+    <div class="gold-line mb-12"></div>
+
+    <h3 class="display text-3xl mb-8">A jornada do investidor:</h3>
+
+    <div class="number-list grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          <strong class="text-white block mb-1">Compra a cota</strong>
+          Pequeno tíquete, R$ 620/mês. Acessível a qualquer profissional.
+        </p>
+      </div>
+      <div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          <strong class="text-white block mb-1">Acompanha a obra</strong>
+          O dinheiro fica em escrow bancário até atingir 66% da meta de captação.
+        </p>
+      </div>
+      <div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          <strong class="text-white block mb-1">Apartamento opera</strong>
+          A partir do mês 30, o prédio começa a alugar (short e long stay).
+        </p>
+      </div>
+      <div>
+        <p class="text-zinc-300 text-sm leading-relaxed">
+          <strong class="text-white block mb-1">Recebe a renda</strong>
+          <span class="gold">R$ 239,94/mês por cota</span>, isento de IR. Por décadas.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFERENCIAL CAPTO -->
+<section id="diferencial" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 02 · POR QUE NÃO É IGUAL · <span class="num">006</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Diferencial</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-12 max-w-4xl">
+      <span class="gold-grad">Não é fundo.</span><br>
+      Não é consórcio. Não é financiamento.
+    </h2>
+    <p class="text-zinc-400 text-xl max-w-3xl leading-relaxed font-light mb-16">
+      É um modelo único. E é justamente isso que torna a venda tão poderosa —
+      e tão dependente de um vendedor consultivo de verdade.
+    </p>
+
+    <table class="elegant">
+      <thead>
+        <tr>
+          <th>Comparativo</th>
+          <th>Fundo Imobiliário</th>
+          <th>Consórcio</th>
+          <th class="text-[#E4C57A]">CAPTO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Escolha do imóvel</td>
+          <td>Gestor decide</td>
+          <td>Sorteio / lance</td>
+          <td class="gold">Você escolhe o prédio</td>
+        </tr>
+        <tr>
+          <td>Renda mensal</td>
+          <td>Sim (cotas)</td>
+          <td>Não (até contemplação)</td>
+          <td class="gold">Sim, a partir do mês 30</td>
+        </tr>
+        <tr>
+          <td>Dividendos</td>
+          <td>Isento até 20k</td>
+          <td>—</td>
+          <td class="gold">Isento total (hold)</td>
+        </tr>
+        <tr>
+          <td>Volatilidade</td>
+          <td>Alta (cotas em bolsa)</td>
+          <td>Baixa</td>
+          <td class="gold">Baixa (físico)</td>
+        </tr>
+        <tr>
+          <td>Liquidez</td>
+          <td>Imediata</td>
+          <td>Lance/sorteio</td>
+          <td class="gold">Mercado secundário</td>
+        </tr>
+        <tr>
+          <td>Tamanho mínimo</td>
+          <td>R$ 100 (cota)</td>
+          <td>R$ 1.000+/mês</td>
+          <td class="gold">R$ 620/mês</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- R.496 -->
+<section id="r496" class="section gradient-bg flex items-center">
+  <div class="stamp">CAPÍTULO 02 · O PRIMEIRO EMPREENDIMENTO · <span class="num">007</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Estamos vendendo agora</div>
+    <h2 class="display text-7xl font-medium leading-[0.95] mb-12 max-w-4xl">
+      <span class="gold-grad">R.496</span><br>
+      <span class="text-3xl text-zinc-400 block mt-4 font-light">Rua Reação, 45 — Butantã, SP</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+      <div>
+        <p class="text-zinc-300 text-lg leading-relaxed mb-6">
+          Empreendimento de <span class="gold">166 unidades</span> a 30 metros do Metrô Butantã —
+          uma estação do Faria Lima, onde o preço do m² <strong class="text-white">dobra</strong>.
+        </p>
+        <p class="text-zinc-300 text-lg leading-relaxed mb-6">
+          Arquitetura assinada pelo <strong class="text-white">Triptyque</strong>,
+          escritório franco-brasileiro que assinou o Rosewood SP e a sede das Olimpíadas de Paris.
+        </p>
+        <p class="text-zinc-300 text-lg leading-relaxed">
+          Operação <strong class="text-white">short stay + long stay</strong> gerida pela
+          <strong class="gold">QAVI</strong> (700+ unidades, +100M em reservas, nota >9.0).
+        </p>
+      </div>
+      <div class="glow-card p-10 relative">
+        <div class="kicker mb-6 relative z-10">Projeções da operação</div>
+        <table class="elegant relative z-10">
+          <tr><td>Ano 4</td><td>Diária R$ 400 · 65% ocup. · <span class="gold">R$ 15,7M</span></td></tr>
+          <tr><td>Ano 5</td><td>Diária R$ 425 · 72% ocup. · <span class="gold">R$ 18,5M</span></td></tr>
+          <tr><td>Ano 6</td><td>Diária R$ 450 · 80% ocup. · <span class="gold">R$ 21,8M</span></td></tr>
+          <tr><td>Ano 7</td><td>Diária R$ 475 · 80% ocup. · <span class="gold">R$ 23,0M</span></td></tr>
+          <tr><td>Ano 8</td><td>Diária R$ 500 · 80% ocup. · <span class="gold">R$ 24,2M</span></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="mt-20 pt-12 border-t border-zinc-800">
+      <p class="quote max-w-4xl">
+        "Vamos lançar <span class="gold">novos empreendimentos a cada trimestre</span>.
+        Sem fila de espera para o vendedor — sempre há um novo prédio para vender."
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- A VAGA -->
+<section id="vaga" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 03 · A VAGA · <span class="num">008</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Capítulo 03 · O Convite</div>
+    <h2 class="display text-7xl md:text-8xl font-medium leading-[0.95] mb-12">
+      <span class="gold-grad">Assessor de</span><br>
+      Investimento Imobiliário<br>
+      <span class="text-zinc-500">— modelo célula.</span>
+    </h2>
+    <p class="text-zinc-400 text-xl max-w-3xl leading-relaxed font-light">
+      Você não vai ser <em>mais um vendedor</em> em uma sala lotada.
+      Você vai entrar em uma <span class="gold">célula de elite</span> de 20 consultores +
+      2 supervisores, com suporte total da empresa e modelo de remuneração desenhado
+      para o vendedor de alta performance.
+    </p>
+
+    <div class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-800">
+      <div class="card bg-[#131316] p-12">
+        <div class="kicker mb-4">A célula 1</div>
+        <h3 class="display text-3xl mb-8">Como se organiza:</h3>
+        <ul class="space-y-3 text-zinc-300">
+          <li class="flex gap-3 items-baseline">
+            <span class="gold mono text-xs">20×</span> Closers (consultores)
+          </li>
+          <li class="flex gap-3 items-baseline">
+            <span class="gold mono text-xs">2×</span> Supervisores (1 para cada 10)
+          </li>
+          <li class="flex gap-3 items-baseline">
+            <span class="gold mono text-xs">1×</span> Auxiliar de RH dedicado
+          </li>
+          <li class="flex gap-3 items-baseline">
+            <span class="gold mono text-xs">1×</span> Diretor Comercial (Vitor Sanson)
+          </li>
+          <li class="flex gap-3 items-baseline">
+            <span class="gold mono text-xs">★</span> R$ 50.000 / mês em tráfego pago
+          </li>
+        </ul>
+      </div>
+      <div class="card bg-[#131316] p-12">
+        <div class="kicker mb-4">Meta projetada</div>
+        <h3 class="display text-3xl mb-8">Por consultor:</h3>
+        <div class="stat-num gold-grad">28</div>
+        <p class="text-zinc-400 mt-3 mb-8">contratos / mês (regime estável)</p>
+        <p class="text-zinc-500 text-sm leading-relaxed">
+          14 CPFs/mês, cada um comprando 2 contratos.
+          Com 200 leads/mês via tráfego direto da Capital + sua rede pessoal.
+          Conversão de 7% sobre lead frio.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REMUNERACAO -->
+<section id="remuneracao" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 03 · REMUNERAÇÃO · <span class="num">009</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">A matemática da vaga</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-16 max-w-4xl">
+      <span class="gold-grad">3% sobre o contrato</span>, pago em <span class="gold-grad">15 meses</span>.<br>
+      <span class="text-3xl text-zinc-400 block mt-4 font-light">Em vez de 30. Dobro de velocidade.</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+      <div class="card">
+        <div class="kicker mb-4">Mínimo garantido</div>
+        <div class="stat-num gold-grad">R$ 2.500<span class="text-base text-zinc-500">/mês</span></div>
+        <p class="text-zinc-400 mt-3 text-sm">
+          Ajuda de custo que funciona como <strong class="text-white">piso de remuneração</strong>.
+          Se a sua comissão no mês for menor, você recebe os R$ 2.500.
+          Se for maior, você fica com a comissão integral.
+        </p>
+      </div>
+      <div class="card">
+        <div class="kicker mb-4">Comissão por contrato</div>
+        <div class="stat-num gold-grad">R$ 37,20<span class="text-base text-zinc-500">/mês</span></div>
+        <p class="text-zinc-400 mt-3 text-sm">
+          Por contrato ativo na sua carteira. Pago todo mês por <strong class="text-white">15 meses</strong> (6% da parcela do cliente).
+          A carteira <strong class="text-white">se acumula</strong>: contratos do mês 1 ainda pagam no mês 15.
+        </p>
+      </div>
+    </div>
+
+    <div class="glow-card p-12 relative">
+      <div class="relative z-10">
+        <div class="kicker mb-6">A régua da comissão</div>
+        <h3 class="display text-3xl mb-8">A partir do mês 1, sua carteira começa a render:</h3>
+        <table class="elegant">
+          <thead>
+            <tr>
+              <th>Mês</th>
+              <th>Contratos ativos</th>
+              <th>Comissão</th>
+              <th>Renda total</th>
+              <th>Componente</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mês 1</td><td>28</td><td class="gold mono">R$ 1.041,60</td><td class="mono"><strong>R$ 2.500</strong></td><td><span style="color:#FCA5A5">Mín. garantido</span></td></tr>
+            <tr><td>Mês 2</td><td>56</td><td class="gold mono">R$ 2.083,20</td><td class="mono"><strong>R$ 2.500</strong></td><td><span style="color:#FCA5A5">Mín. garantido</span></td></tr>
+            <tr><td>Mês 3</td><td>84</td><td class="gold mono">R$ 3.124,80</td><td class="mono"><strong>R$ 3.124,80</strong></td><td><span class="gold">Comissão ultrapassa piso</span></td></tr>
+            <tr><td>Mês 6</td><td>168</td><td class="gold mono">R$ 6.249,60</td><td class="mono"><strong>R$ 6.249,60</strong></td><td><span class="gold">Comissão</span></td></tr>
+            <tr><td>Mês 10</td><td>280</td><td class="gold mono">R$ 10.416,00</td><td class="mono"><strong>R$ 10.416,00</strong></td><td><span class="gold">Comissão</span></td></tr>
+            <tr><td>Mês 15</td><td>420</td><td class="gold mono text-lg">R$ 15.624,00</td><td class="mono text-lg"><strong>R$ 15.624,00</strong></td><td><span class="gold">PICO</span></td></tr>
+          </tbody>
+        </table>
+        <p class="text-zinc-500 text-xs mt-6 italic">
+          *Cálculo no cenário modelo (28 contratos/mês estáveis). Mínimo garantido R$ 2.500/mês até que a comissão ultrapasse o piso.
+          Cenários de 50/mês geram quase 2x esses valores. Veja a calculadora interativa.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPORTE -->
+<section id="suporte" class="section gradient-bg flex items-center">
+  <div class="stamp">CAPÍTULO 03 · SUPORTE · <span class="num">010</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Você não vai estar sozinho</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-16 max-w-4xl">
+      A Capital coloca <span class="gold-grad">tudo na mesa</span><br>
+      para você fechar.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800">
+      <div class="card bg-[#131316] p-10">
+        <i data-lucide="megaphone" class="w-7 h-7 text-[#C8A560] mb-4"></i>
+        <h3 class="display text-2xl mb-3">Leads quentes</h3>
+        <p class="text-zinc-400 leading-relaxed">
+          200 leads/mês entregues por consultor via tráfego pago (R$ 2.500 investidos por consultor) +
+          Renato Cariani como influenciador-canhão.
+        </p>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <i data-lucide="book-open" class="w-7 h-7 text-[#C8A560] mb-4"></i>
+        <h3 class="display text-2xl mb-3">M15-CAPTO</h3>
+        <p class="text-zinc-400 leading-relaxed">
+          Curso de 15 módulos. Cada aula libera a próxima apenas após você executar a ação no CRM.
+          Replica o método que vendeu R$ 1M em 15 dias por aluno no consórcio.
+        </p>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <i data-lucide="users" class="w-7 h-7 text-[#C8A560] mb-4"></i>
+        <h3 class="display text-2xl mb-3">Supervisor dedicado</h3>
+        <p class="text-zinc-400 leading-relaxed">
+          1 supervisor para cada 10 consultores. Roleplay diário, daily 8h,
+          dashboard de performance em tempo real.
+        </p>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <i data-lucide="handshake" class="w-7 h-7 text-[#C8A560] mb-4"></i>
+        <h3 class="display text-2xl mb-3">Hunter de parcerias</h3>
+        <p class="text-zinc-400 leading-relaxed">
+          Time dedicado a fechar parcerias com escritórios de contabilidade, imobiliárias e seguros.
+          Você multiplica seus canais de aquisição.
+        </p>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <i data-lucide="layout-dashboard" class="w-7 h-7 text-[#C8A560] mb-4"></i>
+        <h3 class="display text-2xl mb-3">CRM + Roleta</h3>
+        <p class="text-zinc-400 leading-relaxed">
+          Distribuição meritocrática de leads: quem mais fecha por rede própria,
+          mais lead inbound recebe.
+        </p>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <i data-lucide="award" class="w-7 h-7 text-[#C8A560] mb-4"></i>
+        <h3 class="display text-2xl mb-3">Marca + palco</h3>
+        <p class="text-zinc-400 leading-relaxed">
+          Você vende um produto da Capital Concreto. Empresa de 8 anos,
+          R$ 6M/mês, zero dívida. Reputação que abre portas.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFIL -->
+<section id="perfil" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 03 · PERFIL · <span class="num">011</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Quem buscamos</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-16 max-w-4xl">
+      Empreendedor de <span class="gold-grad">R$ 8-15k</span>.<br>
+      Que quer ir para a próxima.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+      <div>
+        <div class="kicker mb-4 text-emerald-500">Você combina se</div>
+        <ul class="space-y-3 text-zinc-300">
+          <li class="flex gap-3 items-start"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"></i> Tem experiência em vendas consultivas (consórcio, seguros, investimentos, imóveis)</li>
+          <li class="flex gap-3 items-start"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"></i> Já ganha R$ 8-15k e quer dobrar em 12 meses</li>
+          <li class="flex gap-3 items-start"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"></i> Tem uma rede ativa (mínimo 200 contatos qualificados)</li>
+          <li class="flex gap-3 items-start"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"></i> Aguenta ritmo: 4 leads/semana de network + 80 leads/semana inbound</li>
+          <li class="flex gap-3 items-start"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"></i> Quer construir um <em>plano de carreira</em>, não procura "bico"</li>
+          <li class="flex gap-3 items-start"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mt-0.5 flex-shrink-0"></i> Topa contrato MEI + presença física Alphaville</li>
+        </ul>
+      </div>
+      <div>
+        <div class="kicker mb-4" style="color: #DC2626;">Não combina se</div>
+        <ul class="space-y-3 text-zinc-500">
+          <li class="flex gap-3 items-start"><i data-lucide="x" class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"></i> Procura emprego CLT tradicional</li>
+          <li class="flex gap-3 items-start"><i data-lucide="x" class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"></i> Quer ganhar R$ 2k seguros sem performar</li>
+          <li class="flex gap-3 items-start"><i data-lucide="x" class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"></i> Vive só de lead da empresa (cultura "pangaré")</li>
+          <li class="flex gap-3 items-start"><i data-lucide="x" class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"></i> Não tem disciplina para CRM e dailies</li>
+          <li class="flex gap-3 items-start"><i data-lucide="x" class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0"></i> Despreza venda B2C de relacionamento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POTENCIAL DE GANHO -->
+<section id="ganho" class="section gradient-bg flex items-center">
+  <div class="stamp">CAPÍTULO 04 · POTENCIAL DE GANHO · <span class="num">012</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Capítulo 04 · Realidade × Ambição</div>
+    <h2 class="display text-7xl md:text-8xl font-medium leading-[0.95] mb-12">
+      Do <span class="gold-grad">R$ 2,5k</span> no mês 1<br>
+      ao <span class="gold-grad">R$ 28k</span> no mês 15.
+    </h2>
+    <p class="text-zinc-400 text-xl max-w-3xl leading-relaxed font-light mb-16">
+      Esses números não são fantasia.
+      São o que a planilha modelo da Capital projeta — validada por 8 anos de operação,
+      pela diretoria e pelo CEO em pessoa.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+      <div class="card text-center p-10">
+        <div class="kicker mb-3 justify-center">Cenário Conservador</div>
+        <p class="text-xs text-zinc-500 mb-4 uppercase tracking-widest">15 contratos / mês</p>
+        <div class="stat-num gold-grad">R$ 5.870</div>
+        <p class="text-zinc-400 mt-3">no mês 15 (pico)</p>
+        <div class="gold-line my-6"></div>
+        <p class="text-zinc-500 text-sm">Mín. garantido R$ 2.500 até o mês 4</p>
+      </div>
+      <div class="card text-center p-10 glow-card">
+        <div class="kicker mb-3 justify-center">Cenário Modelo</div>
+        <p class="text-xs text-zinc-500 mb-4 uppercase tracking-widest">28 contratos / mês</p>
+        <div class="stat-num gold-grad">R$ 15.624</div>
+        <p class="text-zinc-400 mt-3">no mês 15 (pico)</p>
+        <div class="gold-line my-6"></div>
+        <p class="text-zinc-500 text-sm">Meta oficial da célula · piso até o mês 2</p>
+      </div>
+      <div class="card text-center p-10">
+        <div class="kicker mb-3 justify-center">Cenário Agressivo</div>
+        <p class="text-xs text-zinc-500 mb-4 uppercase tracking-widest">50 contratos / mês</p>
+        <div class="stat-num gold-grad">R$ 27.900</div>
+        <p class="text-zinc-400 mt-3">no mês 15 (pico)</p>
+        <div class="gold-line my-6"></div>
+        <p class="text-zinc-500 text-sm">Comissão ultrapassa piso já no mês 2</p>
+      </div>
+    </div>
+
+    <div class="border border-[#8E7340] p-8 bg-[#131316] flex items-center gap-6">
+      <i data-lucide="calculator" class="w-12 h-12 text-[#C8A560] flex-shrink-0"></i>
+      <div>
+        <h4 class="display text-2xl mb-1">Simule seu próprio cenário</h4>
+        <p class="text-zinc-400">Tem uma calculadora interativa no link que vai ser entregue depois desta sessão. Brinque com os números — eles são reais.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CARREIRA -->
+<section id="carreira" class="section flex items-center">
+  <div class="stamp">CAPÍTULO 04 · PLANO DE CARREIRA · <span class="num">013</span></div>
+  <div class="max-w-6xl mx-auto w-full">
+    <div class="kicker">Construir, não vender</div>
+    <h2 class="display text-6xl font-medium leading-[1] mb-16 max-w-4xl">
+      Em 24 meses, <span class="gold-grad">um BMW</span>.<br>
+      Em 36, um cargo de direção.
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-800">
+      <div class="card bg-[#131316] p-10">
+        <div class="text-xs text-zinc-500 uppercase tracking-widest mb-3">Fase 1 · Meses 0-6</div>
+        <h3 class="display text-3xl mb-4 gold-grad">Closer</h3>
+        <ul class="space-y-2 text-zinc-400 text-sm">
+          <li>• Mín. garantido R$ 2.500 + comissão 3% em 15m</li>
+          <li>• 28 contratos/mês meta</li>
+          <li>• Acesso ao M15-CAPTO</li>
+          <li>• Roleta de leads inbound</li>
+          <li>• Renda alvo: R$ 6-10k/mês</li>
+        </ul>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <div class="text-xs text-zinc-500 uppercase tracking-widest mb-3">Fase 2 · Meses 6-18</div>
+        <h3 class="display text-3xl mb-4 gold-grad">Supervisor</h3>
+        <ul class="space-y-2 text-zinc-400 text-sm">
+          <li>• Mín. garantido R$ 5.000 + 0,3% sobre VGV do time</li>
+          <li>• Lidera 10 closers</li>
+          <li>• Mantém carteira pessoal</li>
+          <li>• Comissão time + comissão própria</li>
+          <li>• Renda alvo: R$ 15-25k/mês</li>
+        </ul>
+      </div>
+      <div class="card bg-[#131316] p-10">
+        <div class="text-xs text-zinc-500 uppercase tracking-widest mb-3">Fase 3 · Meses 18+</div>
+        <h3 class="display text-3xl mb-4 gold-grad">Diretor</h3>
+        <ul class="space-y-2 text-zinc-400 text-sm">
+          <li>• 1% sobre VGV de toda célula</li>
+          <li>• Lidera 20+ pessoas</li>
+          <li>• Participa de planejamento estratégico</li>
+          <li>• Renda alvo: R$ 35-60k+/mês</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="section gradient-bg flex items-center" style="position: relative;">
+  <div class="stamp">FINALE · <span class="num">014</span></div>
+  <div class="line-grid"></div>
+  <div class="max-w-5xl mx-auto w-full text-center relative z-10">
+    <div class="kicker justify-center">A decisão é sua</div>
+    <h2 class="display text-7xl md:text-9xl font-medium leading-[0.95] mb-12">
+      Você está pronto<br>
+      para entrar em uma<br>
+      <span class="gold-grad italic">elite comercial?</span>
+    </h2>
+
+    <p class="text-zinc-300 text-xl max-w-3xl mx-auto leading-relaxed font-light mb-16">
+      Após esta apresentação, vamos para o almoço.
+      Quem tiver interesse real, volta às 13:30 para a fase de integração.
+      A partir dali, começam as entrevistas, os roleplays e a decisão final.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      <div class="border border-[#8E7340] p-8 bg-[#131316]">
+        <div class="kicker justify-center mb-3">Hoje</div>
+        <p class="text-zinc-200 font-medium">14/05 · 13:30</p>
+        <p class="text-zinc-500 text-sm mt-2">Volta da pausa para integração</p>
+      </div>
+      <div class="border border-[#C8A560] p-8 bg-[#131316]">
+        <div class="kicker justify-center mb-3 text-[#E4C57A]">Fim de semana</div>
+        <p class="text-zinc-200 font-medium">15-17/05 · Onboard 72h</p>
+        <p class="text-zinc-500 text-sm mt-2">Sex/Sáb/Dom imersão completa</p>
+      </div>
+      <div class="border border-[#8E7340] p-8 bg-[#131316]">
+        <div class="kicker justify-center mb-3">Próxima semana</div>
+        <p class="text-zinc-200 font-medium">18/05 · GO-LIVE</p>
+        <p class="text-zinc-500 text-sm mt-2">Primeira daily 8h. Comercial no ar.</p>
+      </div>
+    </div>
+
+    <div class="gold-line mb-12 max-w-md mx-auto"></div>
+
+    <p class="quote max-w-3xl mx-auto">
+      "Vendedor bom não fica por dinheiro. Vendedor bom fica por <span class="gold">projeto</span>."
+    </p>
+    <p class="text-zinc-500 mt-4 text-sm uppercase tracking-widest">— Patrick Suyti · Consultor de Growth</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-12 px-12 bg-black border-t border-zinc-900">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-zinc-600 uppercase tracking-widest">
+    <div>Capital Concreto · D-Day 14/05/2026 · Alphaville/SP</div>
+    <div>Documento confidencial · Uso interno · Processo seletivo</div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(section => observer.observe(section));
+</script>
+
+</body>
+</html>

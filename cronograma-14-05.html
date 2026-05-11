@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cronograma D-Day 14/05 — Capital Concreto</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --orange: #EF4F00;
+    --orange-dark: #B43B00;
+    --orange-bright: #F15A24;
+    --orange-deep: #C94200;
+    --black: #030303;
+    --bg-2: #0E0E0E;
+    --bg-3: #161616;
+    --line: #262626;
+    --text: #FFFFFF;
+    --text-mute: #A1A1A1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: 'Bebas Neue', 'Inter', sans-serif; letter-spacing: 0.01em; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .orange { color: var(--orange); }
+  .orange-grad {
+    background: linear-gradient(135deg, var(--orange-bright) 0%, var(--orange) 50%, var(--orange-dark) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .orange-line {
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    height: 1px;
+  }
+  .kicker {
+    color: var(--orange);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .kicker::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--orange);
+  }
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+  }
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3CfeColorMatrix values='0 0 0 0 0.94 0 0 0 0 0.31 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 100px;
+    top: 30px;
+    bottom: 30px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--orange-dark) 0%, var(--line) 100%);
+  }
+  .timeline-item {
+    position: relative;
+    padding-left: 140px;
+    padding-bottom: 48px;
+  }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-item .time {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 92px;
+    text-align: right;
+    padding-right: 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--orange);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+  .timeline-item .dot {
+    position: absolute;
+    left: 92px;
+    top: 9px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--black);
+    border: 3px solid var(--orange);
+    z-index: 2;
+  }
+  .timeline-item.major .dot {
+    background: var(--orange);
+    box-shadow: 0 0 0 6px rgba(239, 79, 0, 0.18);
+  }
+  .timeline-item .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+  }
+  .timeline-item.major .title {
+    font-size: 38px;
+    color: var(--orange-bright);
+  }
+  .timeline-item .duration {
+    display: inline-block;
+    padding: 3px 9px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--text-mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    margin-right: 6px;
+    font-weight: 600;
+  }
+  .timeline-item .duration.gold-pill {
+    background: var(--orange);
+    color: var(--black);
+    border-color: var(--orange);
+  }
+  .timeline-item .owners {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .owner-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    background: rgba(239, 79, 0, 0.1);
+    border: 1px solid var(--orange-dark);
+    border-radius: 100px;
+    font-size: 11px;
+    color: var(--orange-bright);
+    font-weight: 600;
+  }
+  .pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--text-mute);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .stat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    font-weight: 400;
+  }
+  .badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    background: rgba(239, 79, 0, 0.12);
+    border: 1px solid var(--orange-dark);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--orange-bright);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 50px 0 36px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--orange-dark);
+  }
+  .phase-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--orange);
+    letter-spacing: 0.2em;
+  }
+  .phase-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.03em;
+  }
+  .phase-time {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--text-mute);
+  }
+  .logo-mark { height: 36px; }
+  @media (max-width: 768px) {
+    .timeline::before { left: 22px; }
+    .timeline-item { padding-left: 52px; }
+    .timeline-item .time { position: static; width: auto; text-align: left; padding: 0 0 6px 0; }
+    .timeline-item .dot { left: 13px; top: 38px; }
+    .phase-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .phase-time { margin-left: 0; }
+  }
+  .alert-card {
+    background: linear-gradient(135deg, var(--bg-2) 0%, rgba(239, 79, 0, 0.03) 100%);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--orange);
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="border-b border-zinc-900 py-5 px-8" style="background: var(--black);">
+  <div class="max-w-6xl mx-auto flex items-center justify-between gap-6">
+    <div class="flex items-center gap-5">
+      <img src="assets/logo-symbol.png" class="logo-mark" alt="Capital Concreto">
+      <div class="border-l border-zinc-800 pl-5">
+        <p class="text-[10px] text-zinc-500 uppercase tracking-[0.3em] font-bold">Capital Concreto</p>
+        <p class="display text-xl text-white tracking-wider mt-0.5">CRONOGRAMA D-DAY · 14/MAI</p>
+      </div>
+    </div>
+    <span class="badge-live">Operacional · v2 · 11/05</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="relative py-24 px-8 grain" style="background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(239, 79, 0, 0.12) 0%, transparent 50%);">
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="kicker mb-6">Quinta · 14 / Maio / 2026 · Alphaville/SP</div>
+    <h1 class="display text-7xl md:text-8xl leading-[0.95] mb-8 tracking-wide">
+      <span class="orange-grad">D-DAY.</span><br>
+      O DIA EM QUE A CÉLULA 1<br>
+      <em style="font-style: italic; font-weight: 400;">nasce.</em>
+    </h1>
+    <p class="text-zinc-300 text-xl max-w-3xl leading-relaxed font-light">
+      Cronograma hora a hora. 25-30 candidatos chegam.
+      <strong class="text-white">Até as 12:00</strong> a gente vai com TODOS pelo conteúdo e dinâmicas.
+      No almoço, decide quem entra. <strong class="text-white">Pós-almoço, voltam só os selecionados</strong>
+      pra integração + contratação.
+    </p>
+
+    <div class="mt-14 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div>
+        <div class="stat orange-grad">25-30</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest mt-2 font-bold">Candidatos esperados</p>
+      </div>
+      <div>
+        <div class="stat orange-grad">22</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest mt-2 font-bold">A contratar no dia</p>
+      </div>
+      <div>
+        <div class="stat orange-grad">12:00</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest mt-2 font-bold">Corte / Decisão</p>
+      </div>
+      <div>
+        <div class="stat orange-grad">72H</div>
+        <p class="text-zinc-500 text-xs uppercase tracking-widest mt-2 font-bold">Onboard pós · 15-17/05</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIME PRESENTE -->
+<section class="px-8 py-14" style="background: var(--bg-2); border-top: 1px solid var(--line);">
+  <div class="max-w-6xl mx-auto">
+    <div class="kicker mb-8">Time interno · Presente no dia</div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-px bg-zinc-900">
+      <div class="card p-6 text-center">
+        <div class="display text-2xl orange-grad mb-1 tracking-wider">PATRICK</div>
+        <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-2 font-bold">Consultor Growth</p>
+        <p class="text-zinc-300 text-sm">Palco + entrevistas + decisão</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="display text-2xl orange-grad mb-1 tracking-wider">MARCELO</div>
+        <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-2 font-bold">CEO</p>
+        <p class="text-zinc-300 text-sm">Abertura + fechamento</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="display text-2xl orange-grad mb-1 tracking-wider">VITOR</div>
+        <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-2 font-bold">Diretor Comercial</p>
+        <p class="text-zinc-300 text-sm">Palco + roleplay + decisão</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="display text-2xl orange-grad mb-1 tracking-wider">GUILHERME</div>
+        <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-2 font-bold">Marketing</p>
+        <p class="text-zinc-300 text-sm">Captação + suporte</p>
+      </div>
+      <div class="card p-6 text-center">
+        <div class="display text-2xl orange-grad mb-1 tracking-wider">GLAUCIA + RH</div>
+        <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-2 font-bold">RH</p>
+        <p class="text-zinc-300 text-sm">Logística + contratação</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE COMPLETA -->
+<section class="px-8 py-16">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- FASE 1: SETUP -->
+    <div class="phase-header">
+      <span class="phase-num">FASE 01</span>
+      <h2 class="phase-title">SETUP E LOGÍSTICA</h2>
+      <span class="phase-time">08:00 — 09:30</span>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time">08:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">90 min</span>
+          <h3 class="title">Chegada da equipe + setup do auditório</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Equipamento de som (atenção: <strong style="color:#F87171">não repetir problema da live 23/04 com áudio baixo</strong>),
+            projetor testado, slides carregados, sinalização Capital Concreto, mesas de credenciamento.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="user" class="w-3 h-3"></i> Guilherme</span>
+            <span class="owner-tag"><i data-lucide="user" class="w-3 h-3"></i> Aux RH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">08:30</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">60 min</span>
+          <h3 class="title">Coffee + material na mesa</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Café + água + frutas. Cada cadeira: folder Capital + caneta + ficha de inscrição.
+            Mesa de RH: 22 contratos MEI impressos + 8 backup.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="user" class="w-3 h-3"></i> Glaucia</span>
+            <span class="owner-tag"><i data-lucide="user" class="w-3 h-3"></i> Aux RH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">09:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">30 min</span>
+          <h3 class="title">Briefing do time interno</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Alinhamento final: divisão de funções no palco, sinais combinados durante observação,
+            critérios de seleção pré-almoço. Patrick + Vitor revisam quem fala o quê.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="users" class="w-3 h-3"></i> Time todo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 2: BLOCO COM TODOS -->
+    <div class="phase-header">
+      <span class="phase-num">FASE 02 · Com todos os candidatos</span>
+      <h2 class="phase-title">APRESENTAÇÃO + DINÂMICA</h2>
+      <span class="phase-time">10:00 — 12:00</span>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item major">
+        <div class="time">10:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">15 min</span>
+          <span class="duration">CHECK-IN</span>
+          <h3 class="title">Recepção dos candidatos</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Glaucia + Aux RH credenciam na entrada. Cada candidato recebe crachá numerado (1-30).
+            Foto rápida com tablet para painel de decisão. Cadeiras pré-marcadas para facilitar
+            a observação durante a apresentação.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="user-check" class="w-3 h-3"></i> Glaucia + Aux RH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">10:15</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">10 min</span>
+          <span class="duration">PALCO</span>
+          <h3 class="title">Abertura · Marcelo Sampaio</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Marcelo abre. Boas-vindas, contexto da Capital, por que esse processo é diferente.
+            Apresenta Patrick e Vitor. Sai do palco.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Marcelo Sampaio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">10:25</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">35 min</span>
+          <span class="duration">PALCO</span>
+          <h3 class="title">Apresentação Capital + CAPTO</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            <strong class="text-white">Patrick e Vitor dividem o palco.</strong> Patrick conduz blocos 1 e 2
+            (Capital Concreto · Track record · CAPTO · Diferencial vs FII).
+            Vitor entra em "Produto comercial" e R.496. Apresentação HTML em tela cheia.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Patrick</span>
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Vitor Sanson</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">11:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">30 min</span>
+          <span class="duration">PALCO</span>
+          <h3 class="title">A Vaga + Potencial de Ganho</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Blocos 3 e 4 da apresentação. Modelo célula, remuneração, suporte, perfil.
+            <strong class="text-white">Vitor demonstra a calculadora ao vivo</strong> com slider —
+            mostra cenários 28/mês e 50/mês para o público.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Patrick</span>
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Vitor Sanson</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">11:30</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">25 min</span>
+          <span class="duration">DINÂMICA</span>
+          <h3 class="title">Dinâmica de grupo + Roleplay rápido</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Vitor conduz. Cada candidato recebe uma <strong class="text-white">objeção real da live 23/04</strong>
+            ("isso é FII?" / "qual o pior caso?" / "tem escritura?") e tem 2 min pra responder como
+            se fosse pra um cliente. <strong class="text-white">Patrick + Marcelo observam e anotam scores</strong>
+            (postura, clareza, energia, escuta). Cada candidato é avaliado 1-5 em 5 dimensões.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Vitor (conduz)</span>
+            <span class="owner-tag"><i data-lucide="eye" class="w-3 h-3"></i> Patrick + Marcelo (scores)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">11:55</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">5 min</span>
+          <span class="duration">CIERRE</span>
+          <h3 class="title">Liberação para almoço · Instrução final</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Patrick encerra: <strong class="text-white">"Vamos pro almoço. Em alguns minutos, cada um vai receber
+            uma mensagem no WhatsApp: se foi convidado a voltar às 13:30 pra integração e contratação,
+            ou se essa não foi a vez."</strong> Cria expectativa, sem brutalidade.
+            Salão se esvazia.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Patrick</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 3: ALMOÇO + DECISÃO -->
+    <div class="phase-header">
+      <span class="phase-num">FASE 03 · Decisão interna</span>
+      <h2 class="phase-title">ALMOÇO + TRIAGEM</h2>
+      <span class="phase-time">12:00 — 13:30</span>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time">12:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">1h30</span>
+          <span class="duration">CANDIDATOS</span>
+          <h3 class="title">Almoço livre dos candidatos</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Candidatos liberados para almoçar em Alphaville. Em ~30 min, cada um recebe
+            mensagem WhatsApp da Glaucia com confirmação ou agradecimento.
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">12:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">45 min</span>
+          <span class="duration">PAINEL INTERNO</span>
+          <h3 class="title">Reunião de decisão · O painel</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            <strong class="text-white">Time interno trabalha no almoço.</strong> Sala fechada.
+            Patrick + Vitor + Marcelo + Guilherme + Glaucia revisam:
+            scores da dinâmica (5 dimensões: <strong class="text-white">network · histórico · ambição · disciplina · cultura</strong>),
+            observações da apresentação, ficha de cada candidato.
+            <strong class="text-white">Definem os 22:</strong> 20 closers + 2 supervisores (maior score em liderança).
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="users" class="w-3 h-3"></i> Patrick + Vitor + Marcelo + Glaucia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">12:45</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">30 min</span>
+          <span class="duration">COMUNICAÇÃO</span>
+          <h3 class="title">Mensagens WhatsApp · Confirmados e agradecidos</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            <strong class="text-white">Glaucia dispara 2 mensagens-padrão</strong> (já preparadas previamente).<br>
+            <span class="orange">→ Para os 22 selecionados:</span> "Parabéns! Você foi selecionado.
+            Te esperamos às 13:30 para integração e contratação."<br>
+            <span style="color:#A1A1A1">→ Para os não selecionados:</span> "Agradecemos sua presença.
+            Não foi dessa vez, mas você está em nossa lista de espera oficial.
+            Próximo processo seletivo: 29/05."
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="message-circle" class="w-3 h-3"></i> Glaucia</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">13:15</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">15 min</span>
+          <span class="duration">PREP</span>
+          <h3 class="title">Reorganização do auditório</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Auditório vira sala de integração: cadeiras em U, materiais de roleplay,
+            mesa de assinatura MEI ativa, projetor com playbook do M15-CAPTO.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="user" class="w-3 h-3"></i> Aux RH + Guilherme</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASE 4: INTEGRAÇÃO -->
+    <div class="phase-header">
+      <span class="phase-num">FASE 04 · Só os 22 selecionados</span>
+      <h2 class="phase-title">INTEGRAÇÃO + CONTRATAÇÃO</h2>
+      <span class="phase-time">13:30 — 18:00</span>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item major">
+        <div class="time">13:30</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">15 min</span>
+          <span class="duration">BOAS-VINDAS</span>
+          <h3 class="title">Recepção dos 22 + discurso de boas-vindas</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Glaucia confere presença. <strong class="text-white">Marcelo dá as boas-vindas oficiais.</strong>
+            Tom: "vocês são os 22 escolhidos entre +1.000 inscritos.
+            A célula 1 da Capital Concreto começa aqui, agora." Aplausos. Energia alta.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Marcelo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">13:45</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">75 min</span>
+          <h3 class="title">Roleplay avançado · Vitor conduz</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Casos reais. Dupla entre candidatos: um vende, outro é cliente cético.
+            <strong class="text-white">Vitor circula corrigindo postura, abertura, fechamento.</strong>
+            Identifica os 2 supervisores naturais.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Vitor Sanson</span>
+            <span class="owner-tag"><i data-lucide="eye" class="w-3 h-3"></i> Patrick + Marcelo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">15:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">90 min</span>
+          <h3 class="title">Briefing do onboard 72h + agendas</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Patrick apresenta o cronograma do onboard 15-17/05.
+            Cada módulo, cada horário. Materiais que devem trazer (notebook, celular, documentos).
+            <strong class="text-white">Confirmação verbal de presença</strong> nos 3 dias.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Patrick</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">16:30</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">60 min</span>
+          <span class="duration">CONTRATAÇÃO</span>
+          <h3 class="title">Assinatura MEI + documentação</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Mesa de RH. Cada um dos 22 assina contrato MEI no local.
+            <strong class="text-white">Documentação coletada:</strong> RG, CPF, comprovante de residência.
+            Adicionados ao grupo WhatsApp "Célula 1 · Capital".
+            Recebem credencial provisória + acesso ao M15-CAPTO.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="file-signature" class="w-3 h-3"></i> Glaucia + Aux RH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item major">
+        <div class="time">17:30</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration gold-pill">30 min</span>
+          <span class="duration">FECHAMENTO</span>
+          <h3 class="title">Foto oficial + brinde + encerramento</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Foto da célula 1 inteira + time interno. Documento histórico (vai virar prova social
+            no recrutamento da célula 2). Marcelo encerra com frase curta motivacional.
+            Brinde Capital (caneta + caderno).
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="camera" class="w-3 h-3"></i> Guilherme</span>
+            <span class="owner-tag"><i data-lucide="mic" class="w-3 h-3"></i> Marcelo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time">18:00</div>
+        <div class="dot"></div>
+        <div>
+          <span class="duration">30 min</span>
+          <h3 class="title">Debrief interno do time</h3>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Time se reúne. O que funcionou. O que ajustar pra próxima célula.
+            Quem foram os "ouros" da seleção. Como prepara onboard sex-sáb-dom.
+          </p>
+          <div class="owners">
+            <span class="owner-tag"><i data-lucide="users" class="w-3 h-3"></i> Patrick + Vitor + Marcelo + Guilherme + Glaucia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- POS DDAY -->
+<section class="px-8 py-16" style="background: var(--bg-2); border-top: 1px solid var(--line);">
+  <div class="max-w-5xl mx-auto">
+    <div class="kicker mb-6">Após o D-Day · 15 a 18/05</div>
+    <h2 class="display text-5xl mb-12 tracking-wide">O QUE VEM EM SEGUIDA:</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-px bg-zinc-900">
+      <div class="card p-8">
+        <div class="text-xs text-orange uppercase tracking-widest mb-2 font-bold">Sex · 15/05</div>
+        <h3 class="display text-3xl mb-3 tracking-wide">ONBOARD D1</h3>
+        <p class="text-zinc-400 text-sm leading-relaxed">
+          Produto CAPTO + CVM 88 + Divify + simuladores. Módulo Igor Rodrigues.
+          <strong class="text-white">Patrick presente.</strong>
+        </p>
+      </div>
+      <div class="card p-8">
+        <div class="text-xs text-orange uppercase tracking-widest mb-2 font-bold">Sáb · 16/05</div>
+        <h3 class="display text-3xl mb-3 tracking-wide">ONBOARD D2</h3>
+        <p class="text-zinc-400 text-sm leading-relaxed">
+          Playbook + 17 objeções catalogadas + roleplay intenso.
+          <strong class="text-white">Vitor conduz.</strong>
+        </p>
+      </div>
+      <div class="card p-8">
+        <div class="text-xs text-orange uppercase tracking-widest mb-2 font-bold">Dom · 17/05</div>
+        <h3 class="display text-3xl mb-3 tracking-wide">ONBOARD D3</h3>
+        <p class="text-zinc-400 text-sm leading-relaxed">
+          M15-CAPTO + CRM + roleta. <strong class="text-white">Certificação e formatura da célula.</strong>
+        </p>
+      </div>
+      <div class="card p-8 border-2" style="border-color: var(--orange);">
+        <div class="text-xs text-orange uppercase tracking-widest mb-2 font-bold">Seg · 18/05</div>
+        <h3 class="display text-3xl mb-3 orange-grad tracking-wide">GO-LIVE</h3>
+        <p class="text-zinc-400 text-sm leading-relaxed">
+          <strong class="text-white">Primeira daily 8h.</strong> Comercial no ar.
+          Cada consultor recebe seus primeiros 50 leads do tráfego pago.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALERTAS -->
+<section class="px-8 py-16">
+  <div class="max-w-5xl mx-auto">
+    <div class="kicker mb-6" style="color: #F87171">Atenção · Pontos críticos</div>
+    <h2 class="display text-5xl mb-10 tracking-wide">5 ALERTAS PRO TIME INTERNO:</h2>
+
+    <div class="space-y-4">
+      <div class="alert-card p-6 flex gap-5 items-start">
+        <i data-lucide="alert-circle" class="w-6 h-6 text-orange flex-shrink-0 mt-1"></i>
+        <div>
+          <h4 class="font-bold text-white mb-1">Áudio do auditório</h4>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Na live de 23/04 tivemos 8 reclamações nos primeiros 17 min sobre áudio baixo.
+            Testar microfone <strong class="text-white">no dia anterior (13/05)</strong>.
+            Microfone de lapela + microfone de mão de backup.
+          </p>
+        </div>
+      </div>
+      <div class="alert-card p-6 flex gap-5 items-start">
+        <i data-lucide="alert-circle" class="w-6 h-6 text-orange flex-shrink-0 mt-1"></i>
+        <div>
+          <h4 class="font-bold text-white mb-1">Contratos MEI prontos</h4>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            22 contratos + 8 backup. Versão final aprovada pelo jurídico até
+            <strong class="text-white">terça 13/05</strong>. Sem contrato pronto, ninguém é contratado no dia.
+          </p>
+        </div>
+      </div>
+      <div class="alert-card p-6 flex gap-5 items-start">
+        <i data-lucide="alert-circle" class="w-6 h-6 text-orange flex-shrink-0 mt-1"></i>
+        <div>
+          <h4 class="font-bold text-white mb-1">Mensagens WhatsApp prontas (12:45)</h4>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            2 templates: "selecionado" + "não selecionado". Escritos com antecedência,
+            aprovados por Marcelo. <strong class="text-white">Glaucia dispara em massa às 12:45</strong>
+            assim que o painel decidir.
+          </p>
+        </div>
+      </div>
+      <div class="alert-card p-6 flex gap-5 items-start">
+        <i data-lucide="alert-circle" class="w-6 h-6 text-orange flex-shrink-0 mt-1"></i>
+        <div>
+          <h4 class="font-bold text-white mb-1">Sinalização Alphaville</h4>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            Patrick manda pin do Maps no WhatsApp <strong class="text-white">na quarta 13/05</strong>.
+            Aux RH confirma estacionamento + placa "Capital Concreto · Seletivo" na entrada.
+          </p>
+        </div>
+      </div>
+      <div class="alert-card p-6 flex gap-5 items-start">
+        <i data-lucide="alert-circle" class="w-6 h-6 text-orange flex-shrink-0 mt-1"></i>
+        <div>
+          <h4 class="font-bold text-white mb-1">Não selecionados = embaixadores potenciais</h4>
+          <p class="text-zinc-400 text-sm leading-relaxed">
+            8-10 pessoas vão sair sem vaga. <strong class="text-white">Marca importa aqui.</strong>
+            Mensagem clara + agenda da próxima seleção (~29/05). Podem virar clientes
+            ou indicar candidatos da próxima.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="py-10 px-8 border-t border-zinc-900" style="background: var(--black);">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo-symbol.png" class="h-7" alt="Capital">
+      <span class="text-xs text-zinc-600 uppercase tracking-widest font-bold">Capital Concreto · Cronograma D-Day 14/05/2026</span>
+    </div>
+    <div class="text-xs text-zinc-600 uppercase tracking-widest">Documento operacional interno · v2</div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+</script>
+
+</body>
+</html>

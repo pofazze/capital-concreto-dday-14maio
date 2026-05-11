@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Ganhos — Capital Concreto</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root {
+    --orange: #EF4F00;
+    --orange-dark: #B43B00;
+    --orange-bright: #F15A24;
+    --orange-deep: #C94200;
+    --orange-glow: rgba(239, 79, 0, 0.15);
+    --black: #030303;
+    --bg-2: #0E0E0E;
+    --bg-3: #161616;
+    --line: #262626;
+    --text: #FFFFFF;
+    --text-mute: #A1A1A1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: 'Bebas Neue', 'Inter', sans-serif; letter-spacing: 0.01em; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .orange { color: var(--orange); }
+  .orange-grad {
+    background: linear-gradient(135deg, var(--orange-bright) 0%, var(--orange) 50%, var(--orange-dark) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .orange-line {
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+    height: 1px;
+  }
+  .kicker {
+    color: var(--orange);
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .kicker::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    background: var(--orange);
+  }
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    transition: all .3s;
+  }
+  .card:hover {
+    border-color: var(--orange-dark);
+  }
+  .scenario-card {
+    cursor: pointer;
+    position: relative;
+  }
+  .scenario-card.active {
+    border-color: var(--orange);
+    background: linear-gradient(135deg, var(--bg-2) 0%, rgba(239, 79, 0, 0.08) 100%);
+  }
+  .scenario-card.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--orange-bright), var(--orange), var(--orange-dark));
+  }
+  .stat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+  .stat-lg {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 96px;
+    line-height: 1;
+    font-weight: 400;
+  }
+  .grain::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3CfeColorMatrix values='0 0 0 0 0.94 0 0 0 0 0.31 0 0 0 0 0 0 0 0 0.04 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  /* Slider */
+  .slider-wrap {
+    position: relative;
+    padding: 24px 0;
+  }
+  input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--line);
+    outline: none;
+    border-radius: 3px;
+  }
+  input[type=range]::-webkit-slider-runnable-track {
+    height: 6px;
+    background: linear-gradient(to right, var(--orange) var(--val, 50%), var(--line) var(--val, 50%));
+    border-radius: 3px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background: var(--orange);
+    border: 5px solid var(--black);
+    border-radius: 50%;
+    cursor: grab;
+    margin-top: -12px;
+    box-shadow: 0 0 0 1px var(--orange), 0 8px 24px rgba(239, 79, 0, 0.5);
+    transition: transform .15s;
+  }
+  input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.12); }
+  input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.25); }
+  input[type=range]::-moz-range-thumb {
+    width: 30px;
+    height: 30px;
+    background: var(--orange);
+    border: 5px solid var(--black);
+    border-radius: 50%;
+    cursor: grab;
+  }
+  .pill {
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--text-mute);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .pill.active {
+    background: var(--orange);
+    color: var(--black);
+    border-color: var(--orange);
+  }
+  .badge-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    background: rgba(239, 79, 0, 0.12);
+    border: 1px solid var(--orange-dark);
+    border-radius: 100px;
+    font-size: 10px;
+    color: var(--orange-bright);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .badge-live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: 0.3; } }
+  table.elegant {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.elegant th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--orange);
+    font-weight: 700;
+    border-bottom: 2px solid var(--orange-dark);
+  }
+  table.elegant td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  table.elegant tr.peak td {
+    color: var(--orange-bright);
+    font-weight: 600;
+    background: rgba(239, 79, 0, 0.04);
+  }
+  table.elegant td.mono { font-family: 'JetBrains Mono', monospace; }
+  .glow-card {
+    background: linear-gradient(135deg, var(--bg-2) 0%, var(--bg-3) 100%);
+    border: 1px solid var(--orange-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(239, 79, 0, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .logo-mark {
+    height: 36px;
+    filter: brightness(1) saturate(1.1);
+  }
+  .logo-mark-lg {
+    height: 56px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="border-b border-zinc-900 py-5 px-8" style="background: var(--black);">
+  <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
+    <div class="flex items-center gap-5">
+      <img src="assets/logo-symbol.png" class="logo-mark" alt="Capital Concreto">
+      <div class="border-l border-zinc-800 pl-5">
+        <p class="text-[10px] text-zinc-500 uppercase tracking-[0.3em] font-bold">Capital Concreto</p>
+        <p class="display text-xl text-white tracking-wider mt-0.5">CALCULADORA DE GANHOS</p>
+      </div>
+    </div>
+    <span class="badge-live">Modelo Célula v2 · Atualizado 11/05</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="relative py-24 px-8 grain" style="background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(239, 79, 0, 0.12) 0%, transparent 50%);">
+  <div class="max-w-5xl mx-auto text-center relative z-10">
+    <div class="kicker justify-center mb-6">D-Day · Quinta · 14/Maio/2026 · Alphaville/SP</div>
+    <h1 class="display text-7xl md:text-8xl leading-[0.95] mb-6 tracking-wide">
+      QUANTO VOU <span class="orange-grad">GANHAR</span>?
+    </h1>
+    <p class="text-zinc-300 text-xl max-w-3xl mx-auto leading-relaxed font-light">
+      Escolha um cenário pronto ou personalize o seu.
+      Os números são reais — extraídos da <strong class="text-white">planilha modelo Célula v2</strong> da Capital Concreto.
+    </p>
+  </div>
+</section>
+
+<!-- CENARIOS -->
+<section class="px-8 py-16">
+  <div class="max-w-7xl mx-auto">
+    <div class="kicker mb-10">3 Cenários · Escolha um para começar</div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-900 mb-16">
+      <div class="card scenario-card p-10" data-contracts="15" data-name="Conservador">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Cenário 01</div>
+            <h3 class="display text-3xl tracking-wider">CONSERVADOR</h3>
+          </div>
+          <span class="pill">15 / mês</span>
+        </div>
+        <div class="stat orange-grad mb-2">R$ 5.870</div>
+        <p class="text-zinc-500 text-sm mb-6">Pico mensal · mês 15</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Mês 1</span>
+            <span class="mono">R$ 2.500 <span class="text-zinc-600 text-xs">(mín.)</span></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Mês 6</span>
+            <span class="mono">R$ 3.348</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Acumulado 15m</span>
+            <span class="mono orange">R$ 56.300</span>
+          </div>
+        </div>
+        <p class="text-xs text-zinc-500 mt-6 leading-relaxed">
+          Pra quem está começando ou só usa rede pessoal. <strong class="text-zinc-300">Vendedor médio do mercado.</strong>
+        </p>
+      </div>
+
+      <div class="card scenario-card p-10 active" data-contracts="28" data-name="Modelo">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Cenário 02 · Meta oficial</div>
+            <h3 class="display text-3xl tracking-wider">MODELO</h3>
+          </div>
+          <span class="pill active">28 / mês</span>
+        </div>
+        <div class="stat orange-grad mb-2">R$ 15.624</div>
+        <p class="text-zinc-500 text-sm mb-6">Pico mensal · mês 15</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Mês 1</span>
+            <span class="mono">R$ 2.500 <span class="text-zinc-600 text-xs">(mín.)</span></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Mês 6</span>
+            <span class="mono">R$ 6.250</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Acumulado 15m</span>
+            <span class="mono orange">R$ 114.300</span>
+          </div>
+        </div>
+        <p class="text-xs text-zinc-500 mt-6 leading-relaxed">
+          A meta que cada consultor da célula precisa bater. <strong class="text-zinc-300">Performance esperada.</strong>
+        </p>
+      </div>
+
+      <div class="card scenario-card p-10" data-contracts="50" data-name="Agressivo">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <div class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Cenário 03</div>
+            <h3 class="display text-3xl tracking-wider">AGRESSIVO</h3>
+          </div>
+          <span class="pill">50 / mês</span>
+        </div>
+        <div class="stat orange-grad mb-2">R$ 27.900</div>
+        <p class="text-zinc-500 text-sm mb-6">Pico mensal · mês 15</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Mês 1</span>
+            <span class="mono">R$ 2.500 <span class="text-zinc-600 text-xs">(mín.)</span></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Mês 6</span>
+            <span class="mono">R$ 11.160</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-zinc-500">Acumulado 15m</span>
+            <span class="mono orange">R$ 209.600</span>
+          </div>
+        </div>
+        <p class="text-xs text-zinc-500 mt-6 leading-relaxed">
+          Pra quem usa todos os 4 canais (rede + inbound + parceria + exterior). <strong class="text-zinc-300">Top 10% do time.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIMULADOR INTERATIVO -->
+<section class="px-8 py-16" style="background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+  <div class="max-w-7xl mx-auto">
+    <div class="kicker mb-6">Simule seu cenário · Personalize</div>
+    <h2 class="display text-6xl md:text-7xl leading-[0.95] mb-12 max-w-4xl tracking-wide">
+      MOVA O SLIDER. <span class="orange-grad">VEJA SEU FUTURO.</span>
+    </h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- COL ESQUERDA: CONTROLES -->
+      <div class="lg:col-span-5">
+        <div class="card p-10" style="background: var(--black);">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-zinc-500 uppercase tracking-widest font-bold">Contratos por mês</span>
+            <span class="badge-live">Ao vivo</span>
+          </div>
+          <div class="flex items-baseline gap-4 mb-2">
+            <div class="stat-lg orange-grad" id="contractsValue">28</div>
+            <span class="text-zinc-500">contratos / mês</span>
+          </div>
+          <p class="text-xs text-zinc-600 mb-8">
+            Ref: 28/mês é a meta oficial. 14 CPFs × 2 contratos cada.
+          </p>
+
+          <div class="slider-wrap">
+            <input type="range" id="slider" min="5" max="80" value="28" step="1">
+          </div>
+          <div class="flex justify-between text-xs text-zinc-600 mono mt-1">
+            <span>5</span>
+            <span>20</span>
+            <span>35</span>
+            <span>50</span>
+            <span>65</span>
+            <span>80</span>
+          </div>
+
+          <div class="orange-line my-10"></div>
+
+          <div class="space-y-7">
+            <div>
+              <p class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Renda total no mês 1</p>
+              <div class="stat orange-grad" id="month1">R$ 2.500</div>
+              <p class="text-xs text-zinc-600 mt-2" id="month1Note">Mínimo garantido (comissão ainda abaixo do piso)</p>
+            </div>
+
+            <div>
+              <p class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Renda no pico (mês 15)</p>
+              <div class="stat orange-grad" id="peak">R$ 15.624</div>
+              <p class="text-xs text-zinc-600 mt-2">Comissão pico — 420 contratos ativos × R$ 37,20</p>
+            </div>
+
+            <div>
+              <p class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Acumulado em 24 meses</p>
+              <div class="stat orange-grad" id="accumulated">R$ 199.500</div>
+              <p class="text-xs text-zinc-600 mt-2">Soma da renda (mín. ou comissão) nos 24 primeiros meses</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL DIREITA: GRAFICO -->
+      <div class="lg:col-span-7">
+        <div class="card p-10 h-full" style="background: var(--black);">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <div class="kicker mb-2">Evolução mensal</div>
+              <h3 class="display text-3xl tracking-wide">SUA RENDA · 30 PRIMEIROS MESES</h3>
+            </div>
+            <div class="flex gap-2 text-xs">
+              <span class="pill active" data-view="total">Total</span>
+              <span class="pill" data-view="commission">Só comissão</span>
+            </div>
+          </div>
+
+          <div style="position: relative; height: 340px;">
+            <canvas id="chart"></canvas>
+          </div>
+
+          <div class="mt-8 grid grid-cols-3 gap-4 text-center pt-6 border-t border-zinc-800">
+            <div>
+              <p class="text-xs text-zinc-500 uppercase tracking-widest mb-1 font-bold">Comissão 15m</p>
+              <p class="display text-3xl orange-grad" id="comm15">R$ 125k</p>
+            </div>
+            <div>
+              <p class="text-xs text-zinc-500 uppercase tracking-widest mb-1 font-bold">Carteira no pico</p>
+              <p class="display text-3xl orange-grad" id="cartTotal">420</p>
+            </div>
+            <div>
+              <p class="text-xs text-zinc-500 uppercase tracking-widest mb-1 font-bold">VGV em 15m</p>
+              <p class="display text-3xl orange-grad" id="vgvGen">R$ 7,8M</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABELA -->
+<section class="px-8 py-16">
+  <div class="max-w-7xl mx-auto">
+    <div class="kicker mb-6">Detalhamento · Mês a mês</div>
+    <h2 class="display text-5xl mb-10 tracking-wide">A TABELA COMPLETA DO SEU CENÁRIO:</h2>
+
+    <div class="card p-2 overflow-x-auto">
+      <table class="elegant">
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th>Novos / mês</th>
+            <th>Carteira ativa</th>
+            <th>Comissão</th>
+            <th>Mín. garantido</th>
+            <th>Renda total</th>
+            <th>Componente</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ MATEMATICA -->
+<section class="px-8 py-16" style="background: var(--bg-2); border-top: 1px solid var(--line);">
+  <div class="max-w-5xl mx-auto">
+    <div class="kicker mb-6">Por baixo dos panos · Como a conta é feita</div>
+    <h2 class="display text-5xl mb-10 tracking-wide">A MATEMÁTICA TRANSPARENTE:</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-zinc-900">
+      <div class="card p-8">
+        <h4 class="display text-2xl mb-3 orange tracking-wide">A COTA</h4>
+        <p class="text-zinc-400 leading-relaxed text-sm">
+          Cada cota CAPTO = <strong class="text-white">R$ 18.600</strong> (1 m²), parcelado em <strong class="text-white">30x de R$ 620/mês</strong>.
+        </p>
+      </div>
+      <div class="card p-8">
+        <h4 class="display text-2xl mb-3 orange tracking-wide">A COMISSÃO</h4>
+        <p class="text-zinc-400 leading-relaxed text-sm">
+          <strong class="text-white">3% do contrato</strong>, mas pago em <strong class="text-white">15 meses</strong> (não 30). Isso significa <strong class="text-white">6% da parcela</strong> durante 15 meses.
+        </p>
+      </div>
+      <div class="card p-8">
+        <h4 class="display text-2xl mb-3 orange tracking-wide">POR CONTRATO/MÊS</h4>
+        <p class="text-zinc-400 leading-relaxed text-sm">
+          R$ 620 × 6% = <strong class="text-white">R$ 37,20/mês</strong> por contrato ativo na sua carteira, durante 15 meses.
+        </p>
+      </div>
+      <div class="card p-8">
+        <h4 class="display text-2xl mb-3 orange tracking-wide">MÍNIMO GARANTIDO</h4>
+        <p class="text-zinc-400 leading-relaxed text-sm">
+          <strong class="text-white">R$ 2.500 / mês</strong> de ajuda de custo. Funciona como <strong class="text-white">piso</strong>: se a comissão for menor, recebe R$ 2.500. Se maior, recebe a comissão integral.
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-12 glow-card p-10">
+      <div class="kicker mb-3 relative z-10">Fórmula</div>
+      <p class="mono text-xl text-zinc-200 relative z-10 leading-relaxed">
+        renda_mês<sub>n</sub> = <span class="orange">max</span>(<span class="orange">2.500</span>, <span class="orange">37,20</span> × contratos × min(n, 15))
+      </p>
+      <p class="text-zinc-500 text-sm mt-4 relative z-10">
+        <span class="orange mono">2.500</span> é o piso (ajuda de custo). <span class="orange mono">contratos × min(n,15)</span> é a sua carteira ativa de comissão no mês.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="px-8 py-12 border-t border-zinc-900">
+  <div class="max-w-5xl mx-auto text-xs text-zinc-600 leading-relaxed">
+    <p><strong class="text-zinc-500 uppercase tracking-widest font-bold">Importante:</strong> Valores são projeções da planilha modelo Capital Concreto Célula v2 (atualizada 11/05/2026). Não constituem garantia. Comissão variável conforme desempenho, churn e travas de performance descritas em contrato. Mínimo garantido R$ 2.500/mês como ajuda de custo. Estrutura: 3% sobre o contrato distribuído em 15 parcelas mensais (6% da parcela paga pelo cliente).</p>
+  </div>
+</section>
+
+<footer class="py-10 px-8 border-t border-zinc-900" style="background: var(--black);">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo-symbol.png" class="h-7" alt="Capital">
+      <span class="text-xs text-zinc-600 uppercase tracking-widest font-bold">Capital Concreto · D-Day 14/05/2026</span>
+    </div>
+    <div class="text-xs text-zinc-600 uppercase tracking-widest">Documento confidencial · Uso interno</div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const COMMISSION_PER_CONTRACT = 37.20;
+  const MIN_GUARANTEED = 2500;
+  const COMMISSION_DURATION = 15;
+  const COTA_VALUE = 18600;
+
+  function activeContractsAt(month, newPerMonth) {
+    if (month < 1) return 0;
+    const start = Math.max(1, month - COMMISSION_DURATION + 1);
+    return (month - start + 1) * newPerMonth;
+  }
+
+  function commissionAt(month, newPerMonth) {
+    return activeContractsAt(month, newPerMonth) * COMMISSION_PER_CONTRACT;
+  }
+
+  function totalIncomeAt(month, newPerMonth) {
+    return Math.max(MIN_GUARANTEED, commissionAt(month, newPerMonth));
+  }
+
+  function formatBRL(value, withCents = false) {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency', currency: 'BRL',
+      minimumFractionDigits: withCents ? 2 : 0,
+      maximumFractionDigits: withCents ? 2 : 0
+    }).format(value);
+  }
+  function formatNum(value) {
+    return new Intl.NumberFormat('pt-BR').format(value);
+  }
+
+  Chart.defaults.color = '#A1A1A1';
+  Chart.defaults.font.family = "'Inter', sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.borderColor = '#262626';
+
+  const ctx = document.getElementById('chart').getContext('2d');
+  const gradient = ctx.createLinearGradient(0, 0, 0, 340);
+  gradient.addColorStop(0, 'rgba(239, 79, 0, 0.45)');
+  gradient.addColorStop(1, 'rgba(239, 79, 0, 0)');
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Array.from({length: 30}, (_, i) => `M${i+1}`),
+      datasets: [{
+        label: 'Renda mensal',
+        data: [],
+        borderColor: '#EF4F00',
+        backgroundColor: gradient,
+        fill: true,
+        tension: 0.3,
+        borderWidth: 3,
+        pointRadius: 0,
+        pointHoverRadius: 7,
+        pointHoverBackgroundColor: '#F15A24',
+        pointHoverBorderColor: '#030303',
+        pointHoverBorderWidth: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0E0E0E',
+          borderColor: '#EF4F00', borderWidth: 1, padding: 14,
+          titleFont: { size: 11, weight: '700' },
+          titleColor: '#EF4F00',
+          bodyFont: { size: 16, family: "'Bebas Neue', sans-serif" },
+          bodyColor: '#FFFFFF',
+          displayColors: false,
+          callbacks: {
+            title: (items) => `Mês ${items[0].dataIndex + 1}`,
+            label: (item) => formatBRL(item.parsed.y)
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#525252', font: { size: 10 } } },
+        y: {
+          grid: { color: '#161616', drawBorder: false },
+          ticks: { color: '#525252', font: { size: 10 }, callback: (value) => 'R$ ' + (value/1000).toFixed(0) + 'k' },
+          beginAtZero: true
+        }
+      },
+      interaction: { intersect: false, mode: 'index' }
+    }
+  });
+
+  let currentView = 'total';
+
+  function update(contracts) {
+    document.getElementById('contractsValue').textContent = contracts;
+    document.getElementById('slider').value = contracts;
+    document.documentElement.style.setProperty('--val', ((contracts - 5) / 75 * 100) + '%');
+
+    const dataTotal = Array.from({length: 30}, (_, i) => totalIncomeAt(i + 1, contracts));
+    const dataCommission = Array.from({length: 30}, (_, i) => commissionAt(i + 1, contracts));
+    chart.data.datasets[0].data = currentView === 'total' ? dataTotal : dataCommission;
+    chart.update('none');
+
+    const m1 = totalIncomeAt(1, contracts);
+    const peak = totalIncomeAt(15, contracts);
+    const accum24 = Array.from({length: 24}, (_, i) => totalIncomeAt(i + 1, contracts)).reduce((a, b) => a + b, 0);
+    const comm15 = Array.from({length: 15}, (_, i) => commissionAt(i + 1, contracts)).reduce((a, b) => a + b, 0);
+    const cart15 = activeContractsAt(15, contracts);
+    const vgvGen = contracts * 15 * COTA_VALUE;
+
+    document.getElementById('month1').textContent = formatBRL(m1);
+    const m1Commission = commissionAt(1, contracts);
+    const m1Note = document.getElementById('month1Note');
+    if (m1Commission < MIN_GUARANTEED) {
+      m1Note.innerHTML = `Mínimo garantido (comissão de <strong>${formatBRL(m1Commission)}</strong> ainda abaixo do piso)`;
+    } else {
+      m1Note.innerHTML = `Comissão já ultrapassa o piso · ${activeContractsAt(1, contracts)} contratos × R$ 37,20`;
+    }
+    document.getElementById('peak').textContent = formatBRL(peak);
+    document.getElementById('accumulated').textContent = formatBRL(accum24);
+    document.getElementById('comm15').textContent = comm15 >= 1000 ? 'R$ ' + (comm15/1000).toFixed(0) + 'k' : formatBRL(comm15);
+    document.getElementById('cartTotal').textContent = formatNum(cart15);
+    document.getElementById('vgvGen').textContent = vgvGen >= 1000000 ? 'R$ ' + (vgvGen/1000000).toFixed(1) + 'M' : 'R$ ' + (vgvGen/1000).toFixed(0) + 'k';
+
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    [1, 2, 3, 6, 9, 12, 15, 18, 21, 24].forEach(m => {
+      const tr = document.createElement('tr');
+      if (m === 15) tr.classList.add('peak');
+      const commission = commissionAt(m, contracts);
+      const total = Math.max(MIN_GUARANTEED, commission);
+      const usingMin = commission < MIN_GUARANTEED;
+      tr.innerHTML = `
+        <td>Mês ${m}${m === 15 ? ' ★' : ''}</td>
+        <td class="mono">${contracts}</td>
+        <td class="mono">${activeContractsAt(m, contracts)}</td>
+        <td class="mono orange">${formatBRL(commission)}</td>
+        <td class="mono">${formatBRL(MIN_GUARANTEED)}</td>
+        <td class="mono"><strong>${formatBRL(total)}</strong></td>
+        <td class="mono" style="font-size: 10px; color: ${usingMin ? '#F87171' : '#EF4F00'}">${usingMin ? 'Piso ativo' : 'Comissão'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  const slider = document.getElementById('slider');
+  slider.addEventListener('input', (e) => {
+    update(parseInt(e.target.value));
+    document.querySelectorAll('.scenario-card').forEach(c => {
+      const v = parseInt(c.dataset.contracts);
+      c.classList.toggle('active', v === parseInt(e.target.value));
+      c.querySelector('.pill').classList.toggle('active', v === parseInt(e.target.value));
+    });
+  });
+
+  document.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const contracts = parseInt(card.dataset.contracts);
+      document.querySelectorAll('.scenario-card').forEach(c => {
+        c.classList.remove('active');
+        c.querySelector('.pill').classList.remove('active');
+      });
+      card.classList.add('active');
+      card.querySelector('.pill').classList.add('active');
+      update(contracts);
+    });
+  });
+
+  document.querySelectorAll('[data-view]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentView = btn.dataset.view;
+      update(parseInt(slider.value));
+    });
+  });
+
+  update(28);
+</script>
+
+</body>
+</html>
