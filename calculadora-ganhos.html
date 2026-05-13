@@ -250,7 +250,7 @@
         <p class="display text-xl text-white tracking-wider mt-0.5">CALCULADORA DE GANHOS</p>
       </div>
     </div>
-    <span class="badge-live">Modelo Célula v2 · Atualizado 11/05</span>
+    <span class="badge-live">Modelo Célula v2 · Atualizado 13/05</span>
   </div>
 </header>
 
@@ -286,7 +286,7 @@
         <p class="text-zinc-500 text-sm mb-6">Pico mensal · mês 15</p>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between">
-            <span class="text-zinc-500">Mês 1</span>
+            <span class="text-zinc-500">Mês 1–2</span>
             <span class="mono">R$ 2.500 <span class="text-zinc-600 text-xs">(mín.)</span></span>
           </div>
           <div class="flex justify-between">
@@ -315,7 +315,7 @@
         <p class="text-zinc-500 text-sm mb-6">Pico mensal · mês 15</p>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between">
-            <span class="text-zinc-500">Mês 1</span>
+            <span class="text-zinc-500">Mês 1–2</span>
             <span class="mono">R$ 2.500 <span class="text-zinc-600 text-xs">(mín.)</span></span>
           </div>
           <div class="flex justify-between">
@@ -344,7 +344,7 @@
         <p class="text-zinc-500 text-sm mb-6">Pico mensal · mês 15</p>
         <div class="space-y-2 text-sm">
           <div class="flex justify-between">
-            <span class="text-zinc-500">Mês 1</span>
+            <span class="text-zinc-500">Mês 1–2</span>
             <span class="mono">R$ 2.500 <span class="text-zinc-600 text-xs">(mín.)</span></span>
           </div>
           <div class="flex justify-between">
@@ -406,7 +406,7 @@
             <div>
               <p class="text-xs text-zinc-500 uppercase tracking-widest mb-2 font-bold">Renda total no mês 1</p>
               <div class="stat orange-grad" id="month1">R$ 2.500</div>
-              <p class="text-xs text-zinc-600 mt-2" id="month1Note">Mínimo garantido (comissão ainda abaixo do piso)</p>
+              <p class="text-xs text-zinc-600 mt-2" id="month1Note">Mínimo garantido por 2 meses (comissão ainda abaixo do piso)</p>
             </div>
 
             <div>
@@ -515,7 +515,7 @@
       <div class="card p-8">
         <h4 class="display text-2xl mb-3 orange tracking-wide">MÍNIMO GARANTIDO</h4>
         <p class="text-zinc-400 leading-relaxed text-sm">
-          <strong class="text-white">R$ 2.500 / mês</strong> de ajuda de custo. Funciona como <strong class="text-white">piso</strong>: se a comissão for menor, recebe R$ 2.500. Se maior, recebe a comissão integral.
+          <strong class="text-white">R$ 2.500 / mês durante os 2 primeiros meses</strong> de ajuda de custo. Funciona como <strong class="text-white">piso só no mês 1 e 2</strong>: se a comissão for menor, recebe R$ 2.500. A partir do mês 3, vale a comissão integral.
         </p>
       </div>
     </div>
@@ -523,10 +523,10 @@
     <div class="mt-12 glow-card p-10">
       <div class="kicker mb-3 relative z-10">Fórmula</div>
       <p class="mono text-xl text-zinc-200 relative z-10 leading-relaxed">
-        renda_mês<sub>n</sub> = <span class="orange">max</span>(<span class="orange">2.500</span>, <span class="orange">37,20</span> × contratos × min(n, 15))
+        renda_mês<sub>n</sub> = <span class="orange">max</span>(<span class="orange">piso(n)</span>, <span class="orange">37,20</span> × contratos × min(n, 15))
       </p>
       <p class="text-zinc-500 text-sm mt-4 relative z-10">
-        <span class="orange mono">2.500</span> é o piso (ajuda de custo). <span class="orange mono">contratos × min(n,15)</span> é a sua carteira ativa de comissão no mês.
+        <span class="orange mono">piso(n) = 2.500</span> se n ≤ 2, senão <span class="orange mono">0</span> · ajuda de custo limitada aos 2 primeiros meses. <span class="orange mono">contratos × min(n,15)</span> é a sua carteira ativa de comissão no mês.
       </p>
     </div>
   </div>
@@ -535,7 +535,7 @@
 <!-- DISCLAIMER -->
 <section class="px-8 py-12 border-t border-zinc-900">
   <div class="max-w-5xl mx-auto text-xs text-zinc-600 leading-relaxed">
-    <p><strong class="text-zinc-500 uppercase tracking-widest font-bold">Importante:</strong> Valores são projeções da planilha modelo Capital Concreto Célula v2 (atualizada 11/05/2026). Não constituem garantia. Comissão variável conforme desempenho, churn e travas de performance descritas em contrato. Mínimo garantido R$ 2.500/mês como ajuda de custo. Estrutura: 3% sobre o contrato distribuído em 15 parcelas mensais (6% da parcela paga pelo cliente).</p>
+    <p><strong class="text-zinc-500 uppercase tracking-widest font-bold">Importante:</strong> Valores são projeções da planilha modelo Capital Concreto Célula v2 (atualizada 13/05/2026). Não constituem garantia. Comissão variável conforme desempenho, churn e travas de performance descritas em contrato. Mínimo garantido R$ 2.500/mês como ajuda de custo apenas nos 2 primeiros meses; a partir do 3º mês a renda passa a ser 100% comissão. Estrutura: 3% sobre o contrato distribuído em 15 parcelas mensais (6% da parcela paga pelo cliente).</p>
   </div>
 </section>
 
@@ -554,6 +554,7 @@
 
   const COMMISSION_PER_CONTRACT = 37.20;
   const MIN_GUARANTEED = 2500;
+  const MIN_GUARANTEED_MONTHS = 2;
   const COMMISSION_DURATION = 15;
   const COTA_VALUE = 18600;
 
@@ -567,8 +568,12 @@
     return activeContractsAt(month, newPerMonth) * COMMISSION_PER_CONTRACT;
   }
 
+  function minGuaranteedAt(month) {
+    return month <= MIN_GUARANTEED_MONTHS ? MIN_GUARANTEED : 0;
+  }
+
   function totalIncomeAt(month, newPerMonth) {
-    return Math.max(MIN_GUARANTEED, commissionAt(month, newPerMonth));
+    return Math.max(minGuaranteedAt(month), commissionAt(month, newPerMonth));
   }
 
   function formatBRL(value, withCents = false) {
@@ -664,7 +669,7 @@
     const m1Commission = commissionAt(1, contracts);
     const m1Note = document.getElementById('month1Note');
     if (m1Commission < MIN_GUARANTEED) {
-      m1Note.innerHTML = `Mínimo garantido (comissão de <strong>${formatBRL(m1Commission)}</strong> ainda abaixo do piso)`;
+      m1Note.innerHTML = `Mínimo garantido (só nos 2 primeiros meses) · comissão de <strong>${formatBRL(m1Commission)}</strong> ainda abaixo do piso`;
     } else {
       m1Note.innerHTML = `Comissão já ultrapassa o piso · ${activeContractsAt(1, contracts)} contratos × R$ 37,20`;
     }
@@ -680,14 +685,16 @@
       const tr = document.createElement('tr');
       if (m === 15) tr.classList.add('peak');
       const commission = commissionAt(m, contracts);
-      const total = Math.max(MIN_GUARANTEED, commission);
-      const usingMin = commission < MIN_GUARANTEED;
+      const floor = minGuaranteedAt(m);
+      const total = Math.max(floor, commission);
+      const usingMin = floor > 0 && commission < floor;
+      const minCell = floor > 0 ? formatBRL(floor) : '<span class="text-zinc-600">—</span>';
       tr.innerHTML = `
         <td>Mês ${m}${m === 15 ? ' ★' : ''}</td>
         <td class="mono">${contracts}</td>
         <td class="mono">${activeContractsAt(m, contracts)}</td>
         <td class="mono orange">${formatBRL(commission)}</td>
-        <td class="mono">${formatBRL(MIN_GUARANTEED)}</td>
+        <td class="mono">${minCell}</td>
         <td class="mono"><strong>${formatBRL(total)}</strong></td>
         <td class="mono" style="font-size: 10px; color: ${usingMin ? '#F87171' : '#EF4F00'}">${usingMin ? 'Piso ativo' : 'Comissão'}</td>
       `;
