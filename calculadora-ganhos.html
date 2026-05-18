@@ -381,15 +381,15 @@
             <span class="badge-live">Ao vivo</span>
           </div>
           <div class="flex items-baseline gap-4 mb-2">
-            <div class="stat-lg orange-grad" id="contractsValue">28</div>
+            <div class="stat-lg orange-grad" id="contractsValue">40</div>
             <span class="text-zinc-500">contratos / mês</span>
           </div>
           <p class="text-xs text-zinc-600 mb-8">
-            Ref: 28/mês é a meta oficial. 14 CPFs × 2 contratos cada.
+            Ref: 40/mês é a base. 20 CPFs × 2 contratos cada.
           </p>
 
           <div class="slider-wrap">
-            <input type="range" id="slider" min="5" max="200" value="28" step="1">
+            <input type="range" id="slider" min="5" max="200" value="40" step="1">
           </div>
           <div class="flex justify-between text-xs text-zinc-600 mono mt-1">
             <span>5</span>
@@ -651,7 +651,7 @@
   function update(contracts) {
     document.getElementById('contractsValue').textContent = contracts;
     document.getElementById('slider').value = contracts;
-    document.documentElement.style.setProperty('--val', ((contracts - 5) / 75 * 100) + '%');
+    document.documentElement.style.setProperty('--val', ((contracts - 5) / 195 * 100) + '%');
 
     const dataTotal = Array.from({length: 30}, (_, i) => totalIncomeAt(i + 1, contracts));
     const dataCommission = Array.from({length: 30}, (_, i) => commissionAt(i + 1, contracts));
@@ -734,7 +734,7 @@
     });
   });
 
-  update(28);
+  update(40);
 </script>
 
 </body>
